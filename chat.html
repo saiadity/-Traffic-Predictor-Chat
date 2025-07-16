@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Traffic Predictor Chat</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+    .chat-container {
+      max-width: 600px; margin: 40px auto; background: white;
+      border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .messages { max-height: 400px; overflow-y: auto; margin-bottom: 20px; }
+    .message { margin: 10px 0; }
+    .message.user { text-align: right; color: blue; }
+    .message.bot { text-align: left; color: green; }
+    input[type="text"] {
+      width: 80%; padding: 10px; font-size: 1em;
+    }
+    button { padding: 10px 15px; font-size: 1em; }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <h2>🚦 Traffic Predictor Chat</h2>
+    <div class="messages" id="messages"></div>
+    <input type="text" id="userInput" placeholder="Ask about traffic..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const message = input.value.trim();
+      if (!message) return;
+
+      appendMessage("You", message, "user");
+      input.value = "";
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/api/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: message })
+        });
+
+        if (!response.ok) {
+          appendMessage("Bot", "⚠️ Server error: " + response.status, "bot");
+          return;
+        }
+
+        const result = await response.json();
+        appendMessage("Bot", result.response || result.error, "bot");
+      } catch (error) {
+        appendMessage("Bot", "⚠️ Could not connect to server.", "bot");
+      }
+    }
+
+    function appendMessage(sender, text, type) {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = "message " + type;
+      msgDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      document.getElementById("messages").appendChild(msgDiv);
+    }
+  </script>
+</body>
+</html>
