@@ -1,0 +1,38 @@
+Traffic Predictor Chatbot
+This project is a chatbot-based traffic prediction system that helps users forecast traffic levels for a given date and hour. It uses historical data and a machine learning model (Linear Regression) to predict traffic intensity as Light, Moderate, or Heavy.
+
+ Project Structure
+
+Aicte_Project/
+├── app/
+│   ├── api.py              # Handles chatbot API routes
+│   ├── traffic_logic.py    # Core traffic prediction logic
+│   └── __init__.py         # Makes app a Python package
+├── data/
+│   └── traffic_data.csv    # Historical traffic data
+├── notebooks/
+│   └── analysis.ipynb      # EDA and model testing
+├── run.py                  # Launches Flask server
+├── requirements.txt        # Python libraries required
+├── chat.html               # Chatbot UI
+└── README.md               # Project documentation
+
+
+ How to Run the Application
+
+1. Create & Activate Virtual Environment
+python3 -m venv ven                 # Create virtual environment
+source ven/bin/activate            # Linux/macOS
+ven\Scripts\activate               # Windows
+
+2. Navigate to Project Folder
+cd Aicte_Project
+
+3. Install Required Libraries
+pip install -r requirements.txt
+
+4. Run the Flask Application
+python3 run.py
+
+5. Use the Chatbot
+Open http://127.0.0.1:5000 in your browser to interact with the chatbot via chat.html.
